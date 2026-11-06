@@ -1,0 +1,46 @@
+CREATE DATABASE IF NOT EXISTS blood_donor_finder;
+USE blood_donor_finder;
+CREATE TABLE users (
+  user_id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(150) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+CREATE TABLE donors (
+  donor_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL UNIQUE,
+  name VARCHAR(100) NOT NULL,
+  age INT NOT NULL,
+  blood_group VARCHAR(3) NOT NULL,
+  location VARCHAR(100) NOT NULL,
+  phone VARCHAR(15) NOT NULL,
+  available TINYINT(1) DEFAULT 1,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+CREATE TABLE blood_requests (
+  request_id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT NOT NULL,
+  patient_name VARCHAR(100) NOT NULL,
+  blood_group VARCHAR(3) NOT NULL,
+  hospital VARCHAR(150) NOT NULL,
+  location VARCHAR(100) NOT NULL,
+  phone VARCHAR(15) NOT NULL,
+  is_emergency TINYINT(1) DEFAULT 0,
+  status ENUM('Pending','Fulfilled','Cancelled') DEFAULT 'Pending',
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+);
+CREATE TABLE admin (
+  admin_id INT AUTO_INCREMENT PRIMARY KEY,
+  username VARCHAR(50) NOT NULL UNIQUE,
+  password VARCHAR(255) NOT NULL
+);
+CREATE TABLE messages (
+  message_id INT AUTO_INCREMENT PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  email VARCHAR(150) NOT NULL,
+  message TEXT NOT NULL,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
